@@ -1,7 +1,10 @@
-FROM alpine:latest
+FROM docker:dind
 
-# Instalar dependencias necesarias
-RUN apk add --no-cache git bash docker-cli
+# Instalar dependencias adicionales necesarias
+RUN apk add --no-cache git bash
+
+# Configurar BuildKit
+ENV DOCKER_BUILDKIT=1
 
 # Crear directorio de trabajo
 WORKDIR /app

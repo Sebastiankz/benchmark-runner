@@ -41,7 +41,7 @@ for LANG in "go" "rust" "javascript" "python" "c"; do
     fi
 
     echo "Construyendo imagen para $LANG..."
-    (cd "$LANG_DIR" && docker build -t "$IMAGE_NAME" .) || { echo "Error al construir $LANG"; continue; }
+    (cd "$LANG_DIR" && docker build -t "$IMAGE_NAME" . 2>/dev/null)
 
     echo "Ejecutando contenedor para $LANG..."
     mkdir -p "logs/$LANG"
