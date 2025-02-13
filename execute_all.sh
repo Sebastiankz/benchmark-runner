@@ -2,18 +2,19 @@
 
 # Repositorio de soluciones
 REPOSITORIO="https://github.com/Sebastiankz/benchmark.git"
-DIERCTORIO="benchmark"
+DIRECTORIO="benchmark"
 
 # Clonar el repositorio
-git clone $REPOSITORIO $DIERCTORIO || { echo "Error clonando el repositorio"; exit 1; }
+git clone $REPOSITORIO $DIRECTORIO || { echo "Error clonando el repositorio"; exit 1; }
 
-# Lenguajes y nombres de las imagene
+# Lenguajes y nombres de las imágenes
 declare -A LANGUAGES
 LANGUAGES=(
     ["go"]="go-app"
     ["java"]="java-app"
     ["javascript"]="node-app"
     ["python"]="python-app"
+    ["c"]="c-app"  # Añadido el lenguaje C
 )
 
 # Crear carpeta de logs y archivo de resultados
@@ -24,8 +25,7 @@ echo "------------------------------------" >> $OUTPUT_FILE
 
 for LANG in "${!LANGUAGES[@]}"; do
     IMAGE_NAME=${LANGUAGES[$LANG]}
-    LANG_DIR="$DIERCTORIO
-/$LANG"
+    LANG_DIR="$DIRECTORIO/$LANG"  # Directorio correcto con la variable
     LOG_FILE="logs/$LANG/output.txt"
 
     echo "Construyendo imagen para $LANG..."
