@@ -11,10 +11,10 @@ git clone $REPOSITORIO $DIRECTORIO || { echo "Error clonando el repositorio"; ex
 declare -A LANGUAGES
 LANGUAGES=(
     ["go"]="go-app"
-    ["java"]="java-app"
+    ["rust"]="rust-app"
     ["javascript"]="node-app"
     ["python"]="python-app"
-    ["c"]="c-app"  # Añadido el lenguaje C
+    ["c"]="c-app" 
 )
 
 # Crear carpeta de logs y archivo de resultados
