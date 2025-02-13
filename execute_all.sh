@@ -1,47 +1,61 @@
 #!/bin/bash
 
 # Repositorio de soluciones
-REPOSITORIO="https://github.com/Sebastiankz/benchmark.git"
-DIRECTORIO="benchmark"
+REPO_URL="https://github.com/Sebastiankz/benchmark.git"
+DIRECTORY="benchmark"
 
-# Clonar el repositorio
-git clone $REPOSITORIO $DIRECTORIO || { echo "Error clonando el repositorio"; exit 1; }
+# Clonar el repositorio si no existe
+if [ ! -d "$DIRECTORY" ]; then
+    git clone "$REPO_URL" "$DIRECTORY" || { echo "Error clonando el repositorio"; exit 1; }
+else
+    echo "Repositorio ya clonado, actualizando..."
+    (cd "$DIRECTORY" && git pull)
+fi
 
-# Lenguajes y nombres de las imágenes
-declare -A LANGUAGES
-LANGUAGES=(
+# Lenguajes y nombres de imágenes
+declare -A LANGUAGES=(
     ["go"]="go-app"
     ["rust"]="rust-app"
     ["javascript"]="node-app"
     ["python"]="python-app"
-    ["c"]="c-app" 
+    ["c"]="c-app"
 )
 
 # Crear carpeta de logs y archivo de resultados
 mkdir -p logs
 OUTPUT_FILE="execution_results.txt"
-echo "Comparación de tiempos de ejecución" > $OUTPUT_FILE
-echo "------------------------------------" >> $OUTPUT_FILE
+echo "Comparación de tiempos de ejecución" > "$OUTPUT_FILE"
+echo "------------------------------------" >> "$OUTPUT_FILE"
 
-for LANG in "${!LANGUAGES[@]}"; do
+for LANG in "go" "rust" "javascript" "python" "c"; do
     IMAGE_NAME=${LANGUAGES[$LANG]}
-    LANG_DIR="$DIRECTORIO/$LANG"  # Directorio correcto con la variable
+    LANG_DIR="$DIRECTORY/$LANG"
     LOG_FILE="logs/$LANG/output.txt"
 
+    if [ ! -d "$LANG_DIR" ]; then
+        echo "Error: No se encontró el directorio $LANG_DIR"
+        continue
+    fi
+
     echo "Construyendo imagen para $LANG..."
-    (cd $LANG_DIR && docker build -t $IMAGE_NAME .) || { echo "Error al construir $LANG"; exit 1; }
+    (cd "$LANG_DIR" && docker build -t "$IMAGE_NAME" .) || { echo "Error al construir $LANG"; continue; }
 
     echo "Ejecutando contenedor para $LANG..."
     mkdir -p "logs/$LANG"
 
-    # Redirigir la salida a output.txt
-    docker run --rm $IMAGE_NAME | tee "$LOG_FILE"
+    # Ejecutar y capturar salida
+    docker run --rm "$IMAGE_NAME" | tee "$LOG_FILE"
 
-    # Extraer el tiempo de ejecución
-    EXEC_TIME=$(grep -Eo '[0-9]+ ms' "$LOG_FILE")
-    echo "$LANG: $EXEC_TIME" | tee -a $OUTPUT_FILE
+    # Extraer el tiempo de ejecución en diferentes formatos (ms, segundos, etc.)
+    EXEC_TIME=$(grep -Eo '[0-9]+(\.[0-9]+)? (ms|s)' "$LOG_FILE" | head -n 1)
+
+    if [ -z "$EXEC_TIME" ]; then
+        EXEC_TIME="Tiempo no encontrado"
+    fi
+
+    echo "$LANG: $EXEC_TIME" | tee -a "$OUTPUT_FILE"
 done
 
 # Mostrar los resultados
 echo "------------------------------------"
-cat $OUTPUT_FILE
+cat "$OUTPUT_FILE"
