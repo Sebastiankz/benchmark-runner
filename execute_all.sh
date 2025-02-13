@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Habilitar BuildKit para evitar la advertencia de deprecación
+export DOCKER_BUILDKIT=1
+
 # Repositorio de soluciones
 REPO_URL="https://github.com/Sebastiankz/benchmark.git"
 DIRECTORY="benchmark"
