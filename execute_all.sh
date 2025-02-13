@@ -1,7 +1,15 @@
 #!/bin/bash
 
-# Habilitar BuildKit para evitar la advertencia de deprecación
-export DOCKER_BUILDKIT=1
+# Esperar a que el daemon de Docker esté listo
+until docker info > /dev/null 2>&1; do
+    echo "Esperando que el daemon de Docker esté listo..."
+    sleep 1
+done
+
+# Configurar buildx
+docker buildx install
+docker buildx create --use --name builder default
+docker buildx inspect --bootstrap
 
 # Repositorio de soluciones
 REPO_URL="https://github.com/Sebastiankz/benchmark.git"
@@ -41,7 +49,7 @@ for LANG in "go" "rust" "javascript" "python" "c"; do
     fi
 
     echo "Construyendo imagen para $LANG..."
-    (cd "$LANG_DIR" && docker build -t "$IMAGE_NAME" . 2>/dev/null)
+    (cd "$LANG_DIR" && docker buildx build --load -t "$IMAGE_NAME" .) || { echo "Error al construir $LANG"; continue; }
 
     echo "Ejecutando contenedor para $LANG..."
     mkdir -p "logs/$LANG"
