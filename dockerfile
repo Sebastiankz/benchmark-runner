@@ -1,17 +1,18 @@
-# Permite ejecutar un contendor de Docker dentro de otro contenedor de Docker
+# Permite ejecutar un contenedor de Docker dentro de otro contenedor de Docker
 FROM docker:dind
 
-#instala git
+# Instala git
 RUN apk add --no-cache git
 
-#directorios de trabajo
+# Directorio de trabajo
 WORKDIR /benchmark
 
-#clona el repositorio
+# Clona el repositorio
 RUN git clone https://github.com/Sebastiankz/benchmark.git .
 
-#copiar el script de ejecución
+# Copia el script de ejecución y le da permisos
 COPY execute_all.sh /execute_all.sh
+RUN chmod +x /execute_all.sh
 
-#permisos de ejecución
-CMD ["sh", "/execute_all.sh"]
+# Usar ENTRYPOINT en lugar de CMD
+ENTRYPOINT ["/execute_all.sh"]
