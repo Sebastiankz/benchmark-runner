@@ -1,30 +1,34 @@
 #!/bin/bash
 
-# Entrar al directorio del benchmark
-cd /benchmark || { echo "Error: No se encontró /benchmark"; exit 1; }
+# Clonar el repositorio con las soluciones
+git clone https://github.com/TU_USUARIO/benchmark.git
+cd benchmark || { echo "❌ Error: No se pudo clonar el repositorio"; exit 1; }
 
 # Archivo de resultados
-echo "Lenguaje | Tiempo (ms)" > results.txt
+RESULTADOS="resultados.txt"
+echo "Lenguaje | Tiempo (ms)" > "$RESULTADOS"
 
-# Ejecutar los benchmarks por lenguaje
+# Recorrer carpetas de lenguajes
+echo "🚀 Ejecutando benchmarks..."
 for dir in Lenguajes/*/; do
+  # Verifica si es un directorio válido
   if [ -d "$dir" ]; then
     LENGUAJE=$(basename "$dir")
     echo "🔹 Ejecutando $LENGUAJE..."
     
-    # Construir imagen Docker del lenguaje
-    docker build -t "${LENGUAJE//+/}-benchmark" "$dir"
-    
-    # Ejecutar y capturar el tiempo
-    TIEMPO=$(docker run --rm "${LENGUAJE//+/}-benchmark")
-    
+    # Construir imagen Docker
+    docker build -t "${LENGUAJE}-benchmark" "$dir"
+
+    # Ejecutar contenedor y capturar tiempo
+    TIEMPO=$(docker run --rm "${LENGUAJE}-benchmark")
+
     if [ -n "$TIEMPO" ]; then
-      echo "$LENGUAJE | $TIEMPO ms" >> results.txt
-      echo "$LENGUAJE: $TIEMPO ms"
+      echo "$LENGUAJE | $TIEMPO ms" >> "$RESULTADOS"
+      echo "✅ $LENGUAJE: $TIEMPO ms"
     else
-      echo "Error: No se obtuvo resultado en $LENGUAJE"
+      echo "❌ Error: Salida inesperada del contenedor para $LENGUAJE"
     fi
   fi
 done
 
-echo "Resultados guardados en results.txt"
+echo "📄 Resultados guardados en $RESULTADOS"
