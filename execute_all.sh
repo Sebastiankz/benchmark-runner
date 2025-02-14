@@ -1,5 +1,4 @@
 #!/bin/sh
-export DOCKER_HOST="unix:///var/run/docker.sock"
 echo "Lenguaje | Tiempo (ms)" > results.txt
 
 for lang in c go java javascript python 
