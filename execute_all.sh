@@ -3,7 +3,7 @@ set -e
 shopt -s nullglob
 
 # Definir la ruta de clonación
-CODIGOS_PATH= "/benchmark"
+CODIGOS_PATH="/benchmark"
 
 # Clonar (o actualizar) el repositorio de codigos
 if [ ! -d "$CODIGOS_PATH" ]; then
