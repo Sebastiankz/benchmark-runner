@@ -30,5 +30,5 @@ for lang_dir in "$CODIGOS_PATH"/*/; do
     
     # Imprimir el tiempo de ejecución
     echo "$lang: $TIME_OUTPUT"
-  fi
+fi
 done
