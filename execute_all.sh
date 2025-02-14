@@ -3,7 +3,7 @@ echo "Lenguaje | Tiempo (ms)" > results.txt
 
 for lang in c go javascript python rust
 do
-    if [ -d "./$lang" ] && [ -f "./$lang/Dockerfile" ]; then
+    if [ -d "./$lang" ] && [ -f "./$lang/dockerfile" ]; then
         echo "Ejecutando $lang..."
         if docker build -t "$lang-benchmark" "./$lang"; then
             tiempo=$(docker run --rm "$lang-benchmark" 2>/dev/null)
