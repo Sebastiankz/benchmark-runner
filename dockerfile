@@ -8,7 +8,7 @@ RUN apk add --no-cache git
 WORKDIR /benchmark
 
 # Clona el repositorio
-RUN git clone https://github.com/Sebastiankz/benchmark.git /benchmark
+RUN git clone https://github.com/Sebastiankz/benchmark.git .
 
 # Copia el script de ejecución y le da permisos
 COPY execute_all.sh /execute_all.sh
