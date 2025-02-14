@@ -9,4 +9,4 @@ do
     echo "$lang | $tiempo ms" >> results.txt
 done
 
-cat results.txt
+cat results.txt 
