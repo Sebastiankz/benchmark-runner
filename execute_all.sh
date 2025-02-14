@@ -3,12 +3,12 @@ set -e
 shopt -s nullglob
 
 # Definir la ruta de clonación
-CODIGOS_PATH= "/tmp/benchmark-runner"
+CODIGOS_PATH= "/benchmark"
 
 # Clonar (o actualizar) el repositorio de codigos
 if [ ! -d "$CODIGOS_PATH" ]; then
   echo "Clonando repositorio de codigos..."
-  git clone https://github.com/Sebastiankz/benchmark-runner.git "$CODIGOS_PATH"
+  git clone https://github.com/Sebastiankz/benchmark.git "$CODIGOS_PATH"
 else
   echo "Repositorio de codigos ya existe en $CODIGOS_PATH, actualizando..."
   cd "$CODIGOS_PATH" && git pull && cd -
