@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Clonar el repositorio de los programas
-git clone https://github.com/TU_USUARIO/benchmark.git
+git clone https://github.com/Sebastiankz/benchmark.git
 cd benchmark
 
 echo "Lenguaje | Tiempo (ms)" > results.txt
