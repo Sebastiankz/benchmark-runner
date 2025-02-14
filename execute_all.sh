@@ -14,11 +14,9 @@ do
         c)
             apk add --no-cache gcc musl-dev
             start=$(date +%s%3N)
-            gcc c/solution
-            .c -o solution
-             && ./solution
-
+            gcc c/solution.c -o solution && ./solution
             end=$(date +%s%3N)
+            echo "C ejecutado en $((end - start)) ms"
             ;;
         go)
             apk add --no-cache go
