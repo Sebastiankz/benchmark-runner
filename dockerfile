@@ -1,13 +1,13 @@
-FROM docker:latest
+FROM alpine:latest
 
-# Instalar Git y Bash para ejecutar el script
+# Instalar Git, Bash y dependencias necesarias
 RUN apk add --no-cache git bash
 
 # Copiar el script de ejecución
 COPY execute_all.sh /execute_all.sh
 
-# Asignar permisos de ejecución
+# Dar permisos de ejecución al script
 RUN chmod +x /execute_all.sh
 
-# Ejecutar el script cuando el contenedor inicie
-CMD ["/execute_all.sh"]
+# Ejecutar el script cuando inicie el contenedor
+CMD ["/bin/sh", "/execute_all.sh"]
